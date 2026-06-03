@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I.E. Julio Pérez Ferrero — Dashboard Institucional 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,300&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
+<style>
+  :root {
+    --ink: #0d0f12;
+    --ink2: #2a2d35;
+    --muted: #6b7280;
+    --surface: #f5f4f0;
+    --white: #ffffff;
+    --border: rgba(13,15,18,0.08);
+    --c1: #00b8a2;   /* teal — tendencia 2025 */
+    --c2: #ff6b35;   /* coral energético */
+    --c3: #6366f1;   /* violeta digital */
+    --c4: #f59e0b;   /* ámbar cálido */
+    --c5: #10b981;   /* verde esmeralda */
+    --c6: #ec4899;   /* pink accent */
+    --grad: linear-gradient(135deg, #00b8a2 0%, #6366f1 60%, #ec4899 100%);
+    --grad2: linear-gradient(135deg, #0d0f12 0%, #1e2330 100%);
+    --r: 16px;
+    --r2: 24px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--surface);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(245,244,240,0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; gap: 1.5rem;
+    height: 60px;
+  }
+  .nav-logo { display: flex; align-items: center; gap: 10px; }
+  .nav-logo img { width: 36px; height: 36px; object-fit: contain; }
+  .nav-brand { font-family: 'Syne', sans-serif; font-size: 13px; font-weight: 700; color: var(--ink); letter-spacing: -.01em; line-height: 1.2; }
+  .nav-brand span { display: block; font-weight: 400; color: var(--muted); font-size: 11px; }
+  .nav-tabs { display: flex; gap: 4px; margin-left: auto; }
+  .ntab {
+    padding: 6px 14px; font-size: 12px; font-family: 'DM Sans', sans-serif;
+    border: 1px solid transparent; border-radius: 99px; cursor: pointer;
+    background: none; color: var(--muted); font-weight: 500; transition: all .2s;
+  }
+  .ntab:hover { color: var(--ink); background: var(--border); }
+  .ntab.on { background: var(--ink); color: #fff; border-color: var(--ink); }
+  .nav-badge {
+    margin-left: 1rem; padding: 4px 12px; border-radius: 99px;
+    background: var(--grad); color: #fff; font-size: 11px; font-weight: 600;
+    font-family: 'Syne', sans-serif; white-space: nowrap;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    background: var(--grad2);
+    color: #fff;
+    padding: 4rem 2rem 3rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 70% 50%, rgba(99,102,241,.35) 0%, transparent 70%),
+                radial-gradient(ellipse 50% 80% at 20% 80%, rgba(0,184,162,.2) 0%, transparent 60%);
+  }
+  .hero-inner { position: relative; max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: center; }
+  .hero-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--c1); margin-bottom: .75rem; font-family: 'Syne', sans-serif; }
+  .hero-title { font-family: 'Syne', sans-serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 800; line-height: 1.1; margin-bottom: 1rem; }
+  .hero-title em { font-style: normal; background: var(--grad); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .hero-sub { font-size: 15px; color: rgba(255,255,255,.6); max-width: 520px; line-height: 1.7; }
+  .hero-stats { display: flex; gap: 2rem; margin-top: 2rem; }
+  .hstat { text-align: center; }
+  .hstat-v { font-family: 'Syne', sans-serif; font-size: 2rem; font-weight: 800; line-height: 1; }
+  .hstat-v.c1 { color: var(--c1); }
+  .hstat-v.c2 { color: var(--c2); }
+  .hstat-v.c3 { color: #a5b4fc; }
+  .hstat-l { font-size: 11px; color: rgba(255,255,255,.5); margin-top: 2px; text-transform: uppercase; letter-spacing: .06em; }
+  .hero-visual { display: flex; flex-direction: column; align-items: center; gap: 12px; }
+  .hero-logo-wrap {
+    width: 120px; height: 120px; border-radius: 50%;
+    background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.15);
+    display: flex; align-items: center; justify-content: center;
+    backdrop-filter: blur(12px);
+    animation: floatLogo 4s ease-in-out infinite;
+  }
+  .hero-logo-wrap img { width: 90px; height: 90px; object-fit: contain; }
+  @keyframes floatLogo { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-8px)} }
+  .hero-tag { font-size: 11px; color: rgba(255,255,255,.4); text-align: center; font-family: 'Syne', sans-serif; }
+
+  /* ── LAYOUT ── */
+  main { max-width: 1200px; margin: 0 auto; padding: 2rem; }
+  .sec { display: none; }
+  .sec.on { display: block; }
+
+  /* ── SECTION HEADER ── */
+  .sec-hdr { margin-bottom: 1.5rem; }
+  .sec-hdr h2 {
+    font-family: 'Syne', sans-serif; font-size: 1.4rem; font-weight: 700;
+    color: var(--ink); display: flex; align-items: center; gap: .6rem;
+  }
+  .sec-hdr h2 .accent { width: 4px; height: 22px; border-radius: 2px; background: var(--grad); flex-shrink: 0; }
+  .sec-hdr p { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+  /* ── KPI GRID ── */
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 12px; margin-bottom: 1.5rem; }
+  .kpi {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r); padding: 1.2rem 1.3rem;
+    position: relative; overflow: hidden; transition: transform .2s, box-shadow .2s;
+  }
+  .kpi:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,.07); }
+  .kpi::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: var(--grad); }
+  .kpi-lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .06em; margin-bottom: 6px; font-weight: 500; }
+  .kpi-val { font-family: 'Syne', sans-serif; font-size: 1.9rem; font-weight: 800; color: var(--ink); line-height: 1; }
+  .kpi-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+
+  /* ── CARDS ── */
+  .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(340px,1fr)); gap: 1.2rem; margin-bottom: 1.2rem; }
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px,1fr)); gap: 1.2rem; margin-bottom: 1.2rem; }
+  .card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r2); padding: 1.3rem 1.4rem;
+    transition: box-shadow .2s;
+  }
+  .card:hover { box-shadow: 0 6px 24px rgba(0,0,0,.06); }
+  .card-title {
+    font-family: 'Syne', sans-serif; font-size: .75rem; font-weight: 700;
+    text-transform: uppercase; letter-spacing: .09em; color: var(--muted);
+    margin-bottom: 1rem; display: flex; align-items: center; gap: 6px;
+  }
+  .card-title .dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── SEDE CARDS ── */
+  .sede-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 1.2rem; margin-bottom: 1.5rem; }
+  .sede-card {
+    background: var(--white); border: 1px solid var(--border);
+    border-radius: var(--r2); padding: 1.4rem; overflow: hidden; position: relative;
+    transition: transform .25s, box-shadow .25s;
+  }
+  .sede-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,.1); }
+  .sede-card::after {
+    content: ''; position: absolute; bottom: -30px; right: -30px;
+    width: 100px; height: 100px; border-radius: 50%;
+    opacity: .06;
+  }
+  .sede-card.s0::after { background: #534AB7; }
+  .sede-card.s1::after { background: #1D9E75; }
+  .sede-card.s2::after { background: #ff6b35; }
+  .sede-card.s3::after { background: #ec4899; }
+  .sede-accent { height: 4px; border-radius: 2px; margin-bottom: 1rem; }
+  .sede-name { font-family: 'Syne', sans-serif; font-size: .95rem; font-weight: 700; color: var(--ink); margin-bottom: 2px; }
+  .sede-sub { font-size: 12px; color: var(--muted); margin-bottom: 1rem; }
+  .sede-num { font-family: 'Syne', sans-serif; font-size: 2.4rem; font-weight: 800; line-height: 1; margin-bottom: .3rem; }
+  .sede-mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: .8rem; }
+  .smg { background: var(--surface); border-radius: 10px; padding: 8px 10px; }
+  .smg-l { font-size: 10px; color: var(--muted); margin-bottom: 2px; }
+  .smg-v { font-size: 15px; font-weight: 700; color: var(--ink); font-family: 'Syne', sans-serif; }
+  .tags { display: flex; flex-wrap: wrap; gap: 5px; }
+  .tag { padding: 3px 10px; border-radius: 99px; font-size: 11px; font-weight: 600; }
+
+  /* ── BAR LIST ── */
+  .bar-list { display: flex; flex-direction: column; gap: 8px; }
+  .bar-row { display: flex; align-items: center; gap: 8px; }
+  .bar-lbl { font-size: 12px; color: var(--muted); flex: 0 0 120px; text-align: right; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .bar-lbl.sm { flex: 0 0 90px; }
+  .bar-track { flex: 1; height: 14px; background: var(--surface); border-radius: 7px; overflow: hidden; }
+  .bar-fill { height: 100%; border-radius: 7px; transition: width .8s cubic-bezier(.4,0,.2,1); }
+  .bar-n { font-size: 12px; color: var(--muted); min-width: 32px; font-variant-numeric: tabular-nums; }
+
+  /* ── INSIGHT BOXES ── */
+  .insight-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 10px; margin-bottom: 1.5rem; }
+  .insight {
+    border-radius: var(--r); padding: 1rem 1.1rem;
+    border-left: 3px solid;
+  }
+  .insight.warn { background: #fffbeb; border-color: var(--c4); }
+  .insight.info { background: #eff6ff; border-color: var(--c3); }
+  .insight.success { background: #ecfdf5; border-color: var(--c5); }
+  .insight.danger { background: #fff1f2; border-color: #f43f5e; }
+  .insight-title { font-size: 12px; font-weight: 700; color: var(--ink); margin-bottom: 4px; font-family: 'Syne', sans-serif; }
+  .insight-text { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* ── CHART WRAPPER ── */
+  .chart-wrap { position: relative; }
+
+  /* ── DONUT LEGEND ── */
+  .dlegend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+  .dli { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--muted); }
+  .dld { width: 10px; height: 10px; border-radius: 3px; flex-shrink: 0; }
+
+  /* ── DIVERSITY PILLS ── */
+  .etnia-block { margin-top: 12px; }
+  .etnia-sede { font-size: 11px; font-weight: 600; color: var(--muted); margin: 8px 0 4px; text-transform: uppercase; letter-spacing: .06em; }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+  .sec.on > * { animation: fadeUp .4s ease both; }
+  .sec.on > *:nth-child(2) { animation-delay: .05s; }
+  .sec.on > *:nth-child(3) { animation-delay: .1s; }
+  .sec.on > *:nth-child(4) { animation-delay: .15s; }
+  .sec.on > *:nth-child(5) { animation-delay: .2s; }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center; padding: 2rem;
+    font-size: 12px; color: var(--muted);
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+  footer strong { color: var(--ink); font-family: 'Syne', sans-serif; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .nav-tabs { display: none; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-visual { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">
+    <img src="data:image/jpeg;base64,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" alt="Escudo JPF">
+    <div class="nav-brand">Julio Pérez Ferrero<span>Cúcuta · Institución Educativa</span></div>
+  </div>
+  <div class="nav-tabs">
+    <button class="ntab on" onclick="showSec('inst',this)">Institución</button>
+    <button class="ntab" onclick="showSec('sedes',this)">Sedes</button>
+    <button class="ntab" onclick="showSec('socio',this)">Contexto social</button>
+    <button class="ntab" onclick="showSec('familia',this)">Familia</button>
+    <button class="ntab" onclick="showSec('rutas',this)">Atención</button>
+    <button class="ntab" onclick="showSec('inclusion',this)">Inclusión</button>
+  </div>
+  <div class="nav-badge">2.457 estudiantes</div>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Dashboard institucional · Junio 2026</div>
+      <h1 class="hero-title">I.E. <em>Julio Pérez Ferrero</em><br>Análisis de contexto</h1>
+      <p class="hero-sub">Lectura de datos estudiantiles desagregada por sede y jornada. 4 sedes · 12 grados · Cúcuta, Norte de Santander.</p>
+      <div class="hero-stats">
+        <div class="hstat"><div class="hstat-v c1">2.457</div><div class="hstat-l">Estudiantes</div></div>
+        <div class="hstat"><div class="hstat-v c2">4</div><div class="hstat-l">Sedes</div></div>
+        <div class="hstat"><div class="hstat-v c3">281</div><div class="hstat-l">Desplazados</div></div>
+        <div class="hstat"><div class="hstat-v" style="color:#f59e0b">77%</div><div class="hstat-l">Estrato 1</div></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-logo-wrap">
+        <img src="data:image/jpeg;base64,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" alt="Escudo">
+      </div>
+      <div class="hero-tag">Convivencia · Productividad</div>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<!-- ══════════════════ INSTITUCIÓN ══════════════════ -->
+<div id="inst" class="sec on">
+  <div class="sec-hdr">
+    <h2><span class="accent"></span>Resumen institucional</h2>
+    <p>Vista consolidada de las 4 sedes · 2.457 estudiantes en curso · Junio 2026</p>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-lbl">Total estudiantes</div><div class="kpi-val">2.457</div><div class="kpi-sub">4 sedes activas</div></div>
+    <div class="kpi"><div class="kpi-lbl">Jornada mañana</div><div class="kpi-val">1.171</div><div class="kpi-sub">47.7% del total</div></div>
+    <div class="kpi"><div class="kpi-lbl">Jornada tarde</div><div class="kpi-val">993</div><div class="kpi-sub">40.4% del total</div></div>
+    <div class="kpi"><div class="kpi-lbl">Jornada única</div><div class="kpi-val">293</div><div class="kpi-sub">Media y bachillerato</div></div>
+    <div class="kpi"><div class="kpi-lbl">Niñas</div><div class="kpi-val">1.240</div><div class="kpi-sub">50.5%</div></div>
+    <div class="kpi"><div class="kpi-lbl">Con SISBEN</div><div class="kpi-val">1.979</div><div class="kpi-sub">80.5%</div></div>
+    <div class="kpi"><div class="kpi-lbl">Víctimas despl.</div><div class="kpi-val">281</div><div class="kpi-sub">11.4% del total</div></div>
+    <div class="kpi"><div class="kpi-lbl">Etnias distintas</div><div class="kpi-val">9</div><div class="kpi-sub">18 estudiantes</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c3)"></span>Estudiantes por sede</div>
+      <div class="bar-list">
+        <div class="bar-row"><span class="bar-lbl">Nuevo Horizonte</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:linear-gradient(90deg,#6366f1,#8b5cf6)"></div></div><span class="bar-n">1.080</span></div>
+        <div class="bar-row"><span class="bar-lbl">Simón Bolívar</span><div class="bar-track"><div class="bar-fill" style="width:55%;background:linear-gradient(90deg,#00b8a2,#10b981)"></div></div><span class="bar-n">594</span></div>
+        <div class="bar-row"><span class="bar-lbl">Cundinamarca</span><div class="bar-track"><div class="bar-fill" style="width:40%;background:linear-gradient(90deg,#ff6b35,#f59e0b)"></div></div><span class="bar-n">432</span></div>
+        <div class="bar-row"><span class="bar-lbl">San Miguel</span><div class="bar-track"><div class="bar-fill" style="width:32%;background:linear-gradient(90deg,#ec4899,#f43f5e)"></div></div><span class="bar-n">351</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c2)"></span>Distribución por grado</div>
+      <div class="chart-wrap" style="height:200px"><canvas id="cGrado" role="img" aria-label="Estudiantes por grado"></canvas></div>
+    </div>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c1)"></span>Jornadas por sede</div>
+      <div class="chart-wrap" style="height:200px"><canvas id="cJornSede" role="img" aria-label="Jornadas por sede"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c4)"></span>Género por jornada</div>
+      <div class="chart-wrap" style="height:200px"><canvas id="cGenJorn" role="img" aria-label="Género por jornada"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c6)"></span>EPS más frecuentes</div>
+      <div class="bar-list">
+        <div class="bar-row"><span class="bar-lbl sm">Nueva EPS</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#6366f1"></div></div><span class="bar-n">667</span></div>
+        <div class="bar-row"><span class="bar-lbl sm">Coosalud</span><div class="bar-track"><div class="bar-fill" style="width:46%;background:#6366f1"></div></div><span class="bar-n">307</span></div>
+        <div class="bar-row"><span class="bar-lbl sm">Sanitas</span><div class="bar-track"><div class="bar-fill" style="width:43%;background:#6366f1"></div></div><span class="bar-n">285</span></div>
+        <div class="bar-row"><span class="bar-lbl sm">Comfaoriente</span><div class="bar-track"><div class="bar-fill" style="width:21%;background:#6366f1"></div></div><span class="bar-n">139</span></div>
+        <div class="bar-row"><span class="bar-lbl sm">Confaoriente</span><div class="bar-track"><div class="bar-fill" style="width:15%;background:#6366f1"></div></div><span class="bar-n">98</span></div>
+        <div class="bar-row"><span class="bar-lbl sm">Sin dato</span><div class="bar-track"><div class="bar-fill" style="width:94%;background:#e5e7eb"></div></div><span class="bar-n">627</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SEDES ══════════════════ -->
+<div id="sedes" class="sec">
+  <div class="sec-hdr">
+    <h2><span class="accent"></span>Comparativo por sede</h2>
+    <p>Indicadores individuales y cruces entre las 4 sedes de la institución</p>
+  </div>
+  <div class="sede-grid">
+    <div class="sede-card s0">
+      <div class="sede-accent" style="background:linear-gradient(90deg,#6366f1,#8b5cf6)"></div>
+      <div class="sede-name">Nuevo Horizonte</div>
+      <div class="sede-sub">Sede principal · 3 jornadas · 12 grados</div>
+      <div class="sede-num" style="color:#6366f1">1.080</div>
+      <div class="sede-mini-grid">
+        <div class="smg"><div class="smg-l">Estrato 1</div><div class="smg-v">98%</div></div>
+        <div class="smg"><div class="smg-l">Desplazados</div><div class="smg-v">174</div></div>
+        <div class="smg"><div class="smg-l">PAE</div><div class="smg-v">484</div></div>
+        <div class="smg"><div class="smg-l">SISBEN</div><div class="smg-v">91%</div></div>
+      </div>
+      <div class="tags">
+        <span class="tag" style="background:#eef2ff;color:#4338ca">Mañana 361</span>
+        <span class="tag" style="background:#eef2ff;color:#4338ca">Tarde 577</span>
+        <span class="tag" style="background:#eef2ff;color:#4338ca">Única 142</span>
+      </div>
+    </div>
+    <div class="sede-card s1">
+      <div class="sede-accent" style="background:linear-gradient(90deg,#00b8a2,#10b981)"></div>
+      <div class="sede-name">Simón Bolívar</div>
+      <div class="sede-sub">3 jornadas · 12 grados</div>
+      <div class="sede-num" style="color:#00b8a2">594</div>
+      <div class="sede-mini-grid">
+        <div class="smg"><div class="smg-l">Estrato 1</div><div class="smg-v">77%</div></div>
+        <div class="smg"><div class="smg-l">Desplazados</div><div class="smg-v">81</div></div>
+        <div class="smg"><div class="smg-l">PAE</div><div class="smg-v">61</div></div>
+        <div class="smg"><div class="smg-l">SISBEN</div><div class="smg-v">77%</div></div>
+      </div>
+      <div class="tags">
+        <span class="tag" style="background:#ecfdf5;color:#065f46">Mañana 239</span>
+        <span class="tag" style="background:#ecfdf5;color:#065f46">Tarde 302</span>
+        <span class="tag" style="background:#ecfdf5;color:#065f46">Única 53</span>
+      </div>
+    </div>
+    <div class="sede-card s2">
+      <div class="sede-accent" style="background:linear-gradient(90deg,#ff6b35,#f59e0b)"></div>
+      <div class="sede-name">Cundinamarca</div>
+      <div class="sede-sub">Bachillerato · 2 jornadas · 6 grados</div>
+      <div class="sede-num" style="color:#ff6b35">432</div>
+      <div class="sede-mini-grid">
+        <div class="smg"><div class="smg-l">Estrato 1</div><div class="smg-v">48%</div></div>
+        <div class="smg"><div class="smg-l">Desplazados</div><div class="smg-v">23</div></div>
+        <div class="smg"><div class="smg-l">PAE</div><div class="smg-v">136</div></div>
+        <div class="smg"><div class="smg-l">SISBEN</div><div class="smg-v">71%</div></div>
+      </div>
+      <div class="tags">
+        <span class="tag" style="background:#fff7ed;color:#9a3412">Mañana 334</span>
+        <span class="tag" style="background:#fff7ed;color:#9a3412">Única 98</span>
+      </div>
+    </div>
+    <div class="sede-card s3">
+      <div class="sede-accent" style="background:linear-gradient(90deg,#ec4899,#f43f5e)"></div>
+      <div class="sede-name">San Miguel</div>
+      <div class="sede-sub">Primaria · 2 jornadas · 6 grados</div>
+      <div class="sede-num" style="color:#ec4899">351</div>
+      <div class="sede-mini-grid">
+        <div class="smg"><div class="smg-l">Estrato 1</div><div class="smg-v">48%</div></div>
+        <div class="smg"><div class="smg-l">Desplazados</div><div class="smg-v">3</div></div>
+        <div class="smg"><div class="smg-l">PAE</div><div class="smg-v">13</div></div>
+        <div class="smg"><div class="smg-l">SISBEN</div><div class="smg-v">67%</div></div>
+      </div>
+      <div class="tags">
+        <span class="tag" style="background:#fff1f2;color:#9f1239">Mañana 237</span>
+        <span class="tag" style="background:#fff1f2;color:#9f1239">Tarde 114</span>
+      </div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c3)"></span>Género por sede</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="cGenSede" role="img" aria-label="Género por sede"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c2)"></span>Hermanos promedio en la institución</div>
+      <div class="bar-list" style="margin-top:1rem">
+        <div class="bar-row"><span class="bar-lbl">Nuevo Horizonte</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#6366f1"></div></div><span class="bar-n">1.6</span></div>
+        <div class="bar-row"><span class="bar-lbl">San Miguel</span><div class="bar-track"><div class="bar-fill" style="width:88%;background:#ec4899"></div></div><span class="bar-n">1.4</span></div>
+        <div class="bar-row"><span class="bar-lbl">Simón Bolívar</span><div class="bar-track"><div class="bar-fill" style="width:81%;background:#00b8a2"></div></div><span class="bar-n">1.3</span></div>
+        <div class="bar-row"><span class="bar-lbl">Cundinamarca</span><div class="bar-track"><div class="bar-fill" style="width:56%;background:#ff6b35"></div></div><span class="bar-n">0.9</span></div>
+      </div>
+      <div class="insight" style="margin-top:1rem" class="info">
+        <div class="insight-title">Alta dependencia institucional familiar</div>
+        <div class="insight-text">Nuevo Horizonte promedia 1.6 hermanos por familia matriculada, lo que indica que múltiples hijos del mismo hogar asisten a esta sede. Estrategia de continuidad escolar por cobertura territorial.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ SOCIO ══════════════════ -->
+<div id="socio" class="sec">
+  <div class="sec-hdr">
+    <h2><span class="accent"></span>Contexto socioeconómico</h2>
+    <p>Estratificación, SISBEN, desplazamiento y procedencia territorial</p>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-lbl">Estrato 1</div><div class="kpi-val">1.893</div><div class="kpi-sub">77% del total</div></div>
+    <div class="kpi"><div class="kpi-lbl">SISBEN grupo A</div><div class="kpi-val">1.002</div><div class="kpi-sub">Máxima vulnerabilidad</div></div>
+    <div class="kpi"><div class="kpi-lbl">Estrato 3</div><div class="kpi-val">109</div><div class="kpi-sub">Solo Cundina. y San Miguel</div></div>
+    <div class="kpi"><div class="kpi-lbl">Sector rural</div><div class="kpi-val">68</div><div class="kpi-sub">2.8% procedencia rural</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c2)"></span>Estrato por sede (comparativo)</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="cEstrSede" role="img" aria-label="Estrato por sede"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c4)"></span>Grupos SISBEN</div>
+      <div class="bar-list">
+        <div class="bar-row"><span class="bar-lbl sm" style="color:#ef4444;font-weight:600">A1 — crítico</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#ef4444"></div></div><span class="bar-n">229</span></div>
+        <div class="bar-row"><span class="bar-lbl sm">A2</span><div class="bar-track"><div class="bar-fill" style="width:86%;background:#f97316"></div></div><span class="bar-n">196</span></div>
+        <div class="bar-row"><span class="bar-lbl sm">A3</span><div class="bar-track"><div class="bar-fill" style="width:82%;background:#f97316"></div></div><span class="bar-n">188</span></div>
+        <div class="bar-row"><span class="bar-lbl sm">A4</span><div class="bar-track"><div class="bar-fill" style="width:93%;background:#f97316"></div></div><span class="bar-n">212</span></div>
+        <div class="bar-row"><span class="bar-lbl sm">A5</span><div class="bar-track"><div class="bar-fill" style="width:77%;background:#f59e0b"></div></div><span class="bar-n">177</span></div>
+        <div class="bar-row"><span class="bar-lbl sm">B1–B3</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#10b981"></div></div><span class="bar-n">485</span></div>
+        <div class="bar-row"><span class="bar-lbl sm">B4–B7</span><div class="bar-track"><div class="bar-fill" style="width:56%;background:#10b981"></div></div><span class="bar-n">257</span></div>
+        <div class="bar-row"><span class="bar-lbl sm">C y más</span><div class="bar-track"><div class="bar-fill" style="width:22%;background:#00b8a2"></div></div><span class="bar-n">137</span></div>
+      </div>
+    </div>
+  </div>
+  <div class="insight-row">
+    <div class="insight warn"><div class="insight-title">Pobreza extrema dominante</div><div class="insight-text">El 40.8% tiene SISBEN grupo A (máxima vulnerabilidad), lo que indica condiciones críticas de vida en la mayoría de los hogares. Nuevo Horizonte concentra el 98% en estrato 1.</div></div>
+    <div class="insight danger"><div class="insight-title">281 víctimas de desplazamiento</div><div class="insight-text">N. Horizonte concentra 174 (62% del total). Requiere ruta psicosocial diferencial, articulación con ICBF y Unidad de Víctimas. San Miguel tiene solo 3 casos.</div></div>
+    <div class="insight info"><div class="insight-title">Zapatería como economía local</div><div class="insight-text">En Cundinamarca y San Miguel, zapatería y zapatero aparecen entre las 3 ocupaciones más frecuentes de los acudientes, reflejando el tejido productivo local del municipio.</div></div>
+    <div class="insight success"><div class="insight-title">Concentración territorial favorable</div><div class="insight-text">Cada sede tiene un radio de influencia definido. Más del 80% de los estudiantes de cada sede proviene de los 3 barrios más cercanos, facilitando estrategias comunitarias.</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════ FAMILIA ══════════════════ -->
+<div id="familia" class="sec">
+  <div class="sec-hdr">
+    <h2><span class="accent"></span>Familia y acudientes</h2>
+    <p>Composición del hogar, vínculo familiar, estado civil y nivel educativo</p>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-lbl">Acudiente: madre</div><div class="kpi-val">80.6%</div><div class="kpi-sub">1.980 casos</div></div>
+    <div class="kpi"><div class="kpi-lbl">Familia nuclear</div><div class="kpi-val">34.8%</div><div class="kpi-sub">Padre + madre + hijos</div></div>
+    <div class="kpi"><div class="kpi-lbl">Madre cabeza</div><div class="kpi-val">18.5%</div><div class="kpi-sub">Solo madre + hermanos</div></div>
+    <div class="kpi"><div class="kpi-lbl">Edu. superior</div><div class="kpi-val">229</div><div class="kpi-sub">9.3% pregrado o más</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c3)"></span>Composición familiar (top 8)</div>
+      <div class="bar-list">
+        <div class="bar-row"><span class="bar-lbl">P+M+Hermanos</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#6366f1"></div></div><span class="bar-n">855</span></div>
+        <div class="bar-row"><span class="bar-lbl">M+Hermanos</span><div class="bar-track"><div class="bar-fill" style="width:40%;background:#6366f1"></div></div><span class="bar-n">345</span></div>
+        <div class="bar-row"><span class="bar-lbl">Padre+Madre</span><div class="bar-track"><div class="bar-fill" style="width:23%;background:#6366f1"></div></div><span class="bar-n">197</span></div>
+        <div class="bar-row"><span class="bar-lbl">P+M+H+Abuelos</span><div class="bar-track"><div class="bar-fill" style="width:13%;background:#8b5cf6"></div></div><span class="bar-n">112</span></div>
+        <div class="bar-row"><span class="bar-lbl">Solo madre</span><div class="bar-track"><div class="bar-fill" style="width:12%;background:#8b5cf6"></div></div><span class="bar-n">106</span></div>
+        <div class="bar-row"><span class="bar-lbl">M+H+Abuelos</span><div class="bar-track"><div class="bar-fill" style="width:9%;background:#a78bfa"></div></div><span class="bar-n">75</span></div>
+        <div class="bar-row"><span class="bar-lbl">M+Abuelos</span><div class="bar-track"><div class="bar-fill" style="width:7%;background:#a78bfa"></div></div><span class="bar-n">61</span></div>
+        <div class="bar-row"><span class="bar-lbl">M+H+Otros</span><div class="bar-track"><div class="bar-fill" style="width:7%;background:#a78bfa"></div></div><span class="bar-n">59</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c6)"></span>Estado civil de la madre</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="cEstCiv" role="img" aria-label="Estado civil madre"></canvas></div>
+    </div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c1)"></span>Nivel educativo del acudiente</div>
+      <div class="bar-list">
+        <div class="bar-row"><span class="bar-lbl">Media completa (11°)</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#00b8a2"></div></div><span class="bar-n">1.330</span></div>
+        <div class="bar-row"><span class="bar-lbl">Primaria completa</span><div class="bar-track"><div class="bar-fill" style="width:20%;background:#00b8a2"></div></div><span class="bar-n">272</span></div>
+        <div class="bar-row"><span class="bar-lbl">Secundaria completa</span><div class="bar-track"><div class="bar-fill" style="width:14%;background:#00b8a2"></div></div><span class="bar-n">180</span></div>
+        <div class="bar-row"><span class="bar-lbl">Superior completa</span><div class="bar-track"><div class="bar-fill" style="width:12%;background:#10b981"></div></div><span class="bar-n">164</span></div>
+        <div class="bar-row"><span class="bar-lbl">Sec. incompleta</span><div class="bar-track"><div class="bar-fill" style="width:12%;background:#00b8a2"></div></div><span class="bar-n">162</span></div>
+        <div class="bar-row"><span class="bar-lbl">Sin educación</span><div class="bar-track"><div class="bar-fill" style="width:1%;background:#ef4444"></div></div><span class="bar-n">13</span></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c4)"></span>Parentesco acudiente por sede</div>
+      <div class="chart-wrap" style="height:220px"><canvas id="cParent" role="img" aria-label="Parentesco por sede"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ RUTAS ══════════════════ -->
+<div id="rutas" class="sec">
+  <div class="sec-hdr">
+    <h2><span class="accent"></span>Rutas de atención</h2>
+    <p>PAE, transporte escolar, seguro estudiantil y cobertura por sede</p>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-lbl">PAE — complemento</div><div class="kpi-val">535</div><div class="kpi-sub">21.8% de la matrícula</div></div>
+    <div class="kpi"><div class="kpi-lbl">PAE — almuerzo</div><div class="kpi-val">159</div><div class="kpi-sub">6.5% de la matrícula</div></div>
+    <div class="kpi"><div class="kpi-lbl">Sin cobertura PAE</div><div class="kpi-val">1.763</div><div class="kpi-sub">71.7% sin beneficio</div></div>
+    <div class="kpi"><div class="kpi-lbl">Requieren transporte</div><div class="kpi-val">164</div><div class="kpi-sub">6.7% registrado</div></div>
+    <div class="kpi"><div class="kpi-lbl">Seguro estudiantil</div><div class="kpi-val">30</div><div class="kpi-sub">1.2% — muy baja cobertura</div></div>
+    <div class="kpi"><div class="kpi-lbl">Brecha PAE / Estrato 1</div><div class="kpi-val">-55%</div><div class="kpi-sub">Subcobertura estimada</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c5)"></span>Cobertura PAE por sede</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="cPAE" role="img" aria-label="PAE por sede"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c4)"></span>Transporte y seguro estudiantil</div>
+      <div style="margin-bottom:1rem">
+        <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Transporte escolar (SI)</div>
+        <div class="bar-list">
+          <div class="bar-row"><span class="bar-lbl">N. Horizonte</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#f59e0b"></div></div><span class="bar-n">74</span></div>
+          <div class="bar-row"><span class="bar-lbl">S. Bolívar</span><div class="bar-track"><div class="bar-fill" style="width:55%;background:#f59e0b"></div></div><span class="bar-n">41</span></div>
+          <div class="bar-row"><span class="bar-lbl">Cundinamarca</span><div class="bar-track"><div class="bar-fill" style="width:53%;background:#f59e0b"></div></div><span class="bar-n">39</span></div>
+          <div class="bar-row"><span class="bar-lbl">San Miguel</span><div class="bar-track"><div class="bar-fill" style="width:14%;background:#f59e0b"></div></div><span class="bar-n">10</span></div>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Seguro estudiantil (SI)</div>
+        <div class="bar-list">
+          <div class="bar-row"><span class="bar-lbl">N. Horizonte</span><div class="bar-track"><div class="bar-fill" style="width:100%;background:#10b981"></div></div><span class="bar-n">26</span></div>
+          <div class="bar-row"><span class="bar-lbl">Cundinamarca</span><div class="bar-track"><div class="bar-fill" style="width:8%;background:#10b981"></div></div><span class="bar-n">2</span></div>
+          <div class="bar-row"><span class="bar-lbl">San Miguel</span><div class="bar-track"><div class="bar-fill" style="width:4%;background:#10b981"></div></div><span class="bar-n">1</span></div>
+          <div class="bar-row"><span class="bar-lbl">S. Bolívar</span><div class="bar-track"><div class="bar-fill" style="width:4%;background:#10b981"></div></div><span class="bar-n">1</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="insight-row">
+    <div class="insight danger"><div class="insight-title">Cobertura PAE insuficiente</div><div class="insight-text">Solo 28.3% con algún beneficio PAE pese a que 77% es estrato 1. La brecha más crítica está en Simón Bolívar (solo 10.3%) y San Miguel (3.7%).</div></div>
+    <div class="insight warn"><div class="insight-title">Transporte con alto subregistro</div><div class="insight-text">68.7% sin dato en el campo de transporte. La demanda real probablemente supera los 164 registros. Revisar diligenciamiento en admisiones.</div></div>
+    <div class="insight danger"><div class="insight-title">Seguro estudiantil casi inexistente</div><div class="insight-text">Solo 1.2% tiene seguro registrado. N. Horizonte concentra el 87%. Indica un riesgo desprotegido en caso de accidentes o emergencias escolares.</div></div>
+    <div class="insight info"><div class="insight-title">N. Horizonte: mayor cobertura absoluta</div><div class="insight-text">Con 484 beneficiarios PAE, es la sede con mayor cobertura, pero aún deja a más de 596 estudiantes sin beneficio, muchos en estrato 1.</div></div>
+  </div>
+</div>
+
+<!-- ══════════════════ INCLUSIÓN ══════════════════ -->
+<div id="inclusion" class="sec">
+  <div class="sec-hdr">
+    <h2><span class="accent"></span>Inclusión y diversidad</h2>
+    <p>Discapacidades, trastornos, etnias y creencias religiosas por sede</p>
+  </div>
+  <div class="kpi-grid">
+    <div class="kpi"><div class="kpi-lbl">Con discapacidad</div><div class="kpi-val">81</div><div class="kpi-sub">3.3% del total</div></div>
+    <div class="kpi"><div class="kpi-lbl">Discap. intelectual</div><div class="kpi-val">28</div><div class="kpi-sub">34.6% de inclusión</div></div>
+    <div class="kpi"><div class="kpi-lbl">TDAH</div><div class="kpi-val">15</div><div class="kpi-sub">18.5%</div></div>
+    <div class="kpi"><div class="kpi-lbl">Etnias distintas</div><div class="kpi-val">9</div><div class="kpi-sub">18 estudiantes registrados</div></div>
+    <div class="kpi"><div class="kpi-lbl">Discap. visual</div><div class="kpi-val">9</div><div class="kpi-sub">Baja visión + ceguera</div></div>
+    <div class="kpi"><div class="kpi-lbl">Cap. excepcionales</div><div class="kpi-val">0</div><div class="kpi-sub">Campo sin diligenciar</div></div>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c3)"></span>Tipos de discapacidad o trastorno</div>
+      <div class="chart-wrap" style="height:240px"><canvas id="cDisc" role="img" aria-label="Discapacidades y trastornos"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot" style="background:var(--c1)"></span>Presencia étnica por sede</div>
+      <div class="etnia-block">
+        <div class="etnia-sede">Cundinamarca</div>
+        <div class="tags"><span class="tag" style="background:#ecfdf5;color:#065f46">Achagua ×3</span><span class="tag" style="background:#ecfdf5;color:#065f46">Cocama ×1</span><span class="tag" style="background:#ecfdf5;color:#065f46">Makaguaje ×1</span><span class="tag" style="background:#ecfdf5;color:#065f46">Miraña ×1</span><span class="tag" style="background:#ecfdf5;color:#065f46">Zenú ×1</span></div>
+        <div class="etnia-sede">Simón Bolívar</div>
+        <div class="tags"><span class="tag" style="background:#eef2ff;color:#3730a3">Barí (Motilón) ×3</span><span class="tag" style="background:#eef2ff;color:#3730a3">Wayuu ×1</span></div>
+        <div class="etnia-sede">Nuevo Horizonte</div>
+        <div class="tags"><span class="tag" style="background:#eff6ff;color:#1e40af">Guanaca ×1</span><span class="tag" style="background:#eff6ff;color:#1e40af">Negritudes ×1</span><span class="tag" style="background:#eff6ff;color:#1e40af">Barí ×1</span><span class="tag" style="background:#eff6ff;color:#1e40af">Muisca ×1</span><span class="tag" style="background:#eff6ff;color:#1e40af">Letuama ×1</span></div>
+        <div class="etnia-sede">San Miguel</div>
+        <div class="tags"><span class="tag" style="background:#fdf4ff;color:#6b21a8">Arhuaco (IJKA) ×1</span><span class="tag" style="background:#fdf4ff;color:#6b21a8">Nonuya ×1</span></div>
+      </div>
+      <div class="card-title" style="margin-top:1.2rem"><span class="dot" style="background:var(--c4)"></span>Credo religioso (institución)</div>
+      <div class="chart-wrap" style="height:150px"><canvas id="cCredo" role="img" aria-label="Credo religioso"></canvas></div>
+    </div>
+  </div>
+  <div class="insight-row">
+    <div class="insight warn"><div class="insight-title">Discap. intelectual: primera causa</div><div class="insight-text">28 casos (34.6%) lideran la tabla. N. Horizonte tiene 16. Se requiere mayor apoyo pedagógico diferenciado y acompañamiento especializado.</div></div>
+    <div class="insight danger"><div class="insight-title">Discap. visual en bachillerato</div><div class="insight-text">Cundinamarca (6° a 11°) tiene 5 casos de discapacidad visual. Es urgente verificar disponibilidad de apoyos tecnológicos y material pedagógico accesible.</div></div>
+    <div class="insight info"><div class="insight-title">9 etnias — diversidad real</div><div class="insight-text">La diversidad étnica registrada es mayor que el promedio de la región. Se recomienda revisión con la comunidad para detectar subregistro, especialmente en N. Horizonte.</div></div>
+    <div class="insight danger"><div class="insight-title">Capacidades excepcionales vacías</div><div class="insight-text">Ningún estudiante tiene registrada capacidad excepcional en ninguna sede. Este campo requiere revisión institucional para identificar talentos y articular programas de gifted education.</div></div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <strong>I.E. Julio Pérez Ferrero</strong> · Cúcuta, Norte de Santander · Dashboard institucional generado junio 2026 · Datos: Sistema de matrícula · 2.457 estudiantes en curso
+</footer>
+
+<script>
+const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+const tc = isDark ? '#9ca3af' : '#6b7280';
+const gc = isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.06)';
+const wc = isDark ? '#1f2937' : '#ffffff';
+
+Chart.defaults.font.family = "'DM Sans', sans-serif";
+
+const ax = (stk) => ({
+  x: { stacked:!!stk, ticks:{color:tc,font:{size:11}}, grid:{color:gc} },
+  y: { stacked:!!stk, ticks:{color:tc,font:{size:11}}, grid:{color:gc} }
+});
+const base = { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}} };
+const SEDES = ['N. Horizonte','S. Bolívar','Cundinamarca','San Miguel'];
+const COLS = ['#6366f1','#00b8a2','#ff6b35','#ec4899'];
+
+function showSec(id, el) {
+  document.querySelectorAll('.sec').forEach(s=>s.classList.remove('on'));
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
+  document.getElementById(id).classList.add('on');
+  el.classList.add('on');
+  setTimeout(drawCharts, 50);
+}
+
+let drawn = false;
+function drawCharts() {
+  if (drawn) return;
+  drawn = true;
+
+  new Chart('cGrado', { type:'bar', data:{
+    labels:['Trans.','1°','2°','3°','4°','5°','6°','7°','8°','9°','10°','11°'],
+    datasets:[{ data:[170,205,229,234,237,226,288,218,183,174,153,140],
+      backgroundColor: ['#6366f1','#7c3aed','#8b5cf6','#a78bfa','#c4b5fd','#ddd6fe','#00b8a2','#10b981','#34d399','#6ee7b7','#ff6b35','#f97316'],
+      borderRadius: 6 }]
+  }, options:{...base, scales:ax()} });
+
+  new Chart('cJornSede', { type:'bar', data:{
+    labels:SEDES,
+    datasets:[
+      {label:'Mañana',data:[361,239,334,237],backgroundColor:'#6366f1',borderRadius:3},
+      {label:'Tarde',data:[577,302,0,114],backgroundColor:'#00b8a2',borderRadius:3},
+      {label:'Única',data:[142,53,98,0],backgroundColor:'#f59e0b',borderRadius:3}
+    ]
+  }, options:{...base, scales:ax(true)} });
+
+  new Chart('cGenJorn', { type:'bar', data:{
+    labels:['Mañana','Tarde','Única'],
+    datasets:[
+      {label:'Niñas',data:[606,424,210],backgroundColor:'#ec4899',borderRadius:3},
+      {label:'Niños',data:[565,569,83],backgroundColor:'#6366f1',borderRadius:3}
+    ]
+  }, options:{...base, scales:ax(true)} });
+
+  new Chart('cGenSede', { type:'bar', data:{
+    labels:SEDES,
+    datasets:[
+      {label:'Niñas',data:[566,288,208,178],backgroundColor:'#ec4899',borderRadius:4},
+      {label:'Niños',data:[514,306,224,173],backgroundColor:'#6366f1',borderRadius:4}
+    ]
+  }, options:{...base, scales:ax()} });
+
+  new Chart('cEstrSede', { type:'bar', data:{
+    labels:SEDES,
+    datasets:[
+      {label:'E1',data:[1061,457,208,167],backgroundColor:'#ef4444',borderRadius:3},
+      {label:'E2',data:[6,59,133,102],backgroundColor:'#f97316',borderRadius:3},
+      {label:'E3',data:[0,0,55,54],backgroundColor:'#10b981',borderRadius:3}
+    ]
+  }, options:{...base, scales:ax(true)} });
+
+  new Chart('cEstCiv', { type:'doughnut', data:{
+    labels:['Unión libre','Soltera','Casada','Separada','Viuda','Sin dato'],
+    datasets:[{data:[967,632,360,83,16,388],
+      backgroundColor:['#6366f1','#ec4899','#00b8a2','#f59e0b','#ff6b35','#e5e7eb'],borderWidth:0}]
+  }, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:tc,font:{size:11},boxWidth:12}}},cutout:'60%'} });
+
+  new Chart('cParent', { type:'bar', data:{
+    labels:SEDES,
+    datasets:[
+      {label:'Madre',data:[851,492,341,296],backgroundColor:'#ec4899',borderRadius:3},
+      {label:'Padre',data:[84,37,46,32],backgroundColor:'#6366f1',borderRadius:3},
+      {label:'Abuela/o',data:[87,27,20,13],backgroundColor:'#f59e0b',borderRadius:3},
+      {label:'Otros',data:[58,35,25,10],backgroundColor:'#e5e7eb',borderRadius:3}
+    ]
+  }, options:{...base, scales:ax(true)} });
+
+  new Chart('cPAE', { type:'bar', data:{
+    labels:SEDES,
+    datasets:[
+      {label:'Complemento',data:[398,60,73,4],backgroundColor:'#10b981',borderRadius:3},
+      {label:'Almuerzo',data:[86,1,63,9],backgroundColor:'#6ee7b7',borderRadius:3},
+      {label:'Sin PAE',data:[596,533,296,338],backgroundColor:'#f3f4f6',borderRadius:3}
+    ]
+  }, options:{...base, scales:ax(true)} });
+
+  new Chart('cDisc', { type:'bar', data:{
+    labels:['Dis. intelectual','TDAH','Trast. aprend.','Dis. visual BV','TEA','Dis. psicosocial','Dis. física','Dis. visual ceg.'],
+    datasets:[{data:[28,15,11,7,6,5,4,2],
+      backgroundColor:['#ef4444','#f97316','#f59e0b','#6366f1','#8b5cf6','#ec4899','#10b981','#6366f1'],
+      borderRadius:4}]
+  }, options:{...base, indexAxis:'y', scales:{x:{ticks:{color:tc,font:{size:10}},grid:{color:gc}},y:{ticks:{color:tc,font:{size:10}},grid:{color:gc}}}} });
+
+  new Chart('cCredo', { type:'doughnut', data:{
+    labels:['Católica','Evangélico','Ninguna','Pentecostal','T.Jehová','Otros/SD'],
+    datasets:[{data:[1266,284,43,37,26,21],
+      backgroundColor:['#6366f1','#00b8a2','#9ca3af','#f59e0b','#ec4899','#e5e7eb'],borderWidth:0}]
+  }, options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'right',labels:{color:tc,font:{size:10},boxWidth:10}}},cutout:'55%'} });
+}
+
+setTimeout(drawCharts, 200);
+</script>
+</body>
+</html>
